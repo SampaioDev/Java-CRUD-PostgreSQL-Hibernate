@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.davisampaio.projetoTeste.exception.ResourceNotFoundException;
+import com.br.davisampaio.projetoTeste.model.Disciplina;
 import com.br.davisampaio.projetoTeste.model.Professor;
+import com.br.davisampaio.projetoTeste.repository.DisciplinaRepository;
 import com.br.davisampaio.projetoTeste.repository.ProfessorRepository;
 
 @RestController
@@ -27,6 +29,8 @@ public class ProfessorController {
 
 	@Autowired
     private ProfessorRepository professorRepository;	
+	@Autowired
+    private DisciplinaRepository disciplinaRepository;	
 	
 	@GetMapping("/professor")
     public List<Professor> getAllProfessors() {
@@ -43,6 +47,18 @@ public class ProfessorController {
 	
 	@PostMapping("/professor")
     public Professor createProfessor(@Valid @RequestBody Professor professor) {
+        return professorRepository.save(professor);
+    }
+	
+	@PutMapping("/professor/professorId:{id}/disciplinaId:{idDisciplina}")
+    public Professor addDisciplinaToProfessor(@PathVariable(value = "id") Long professorId, @PathVariable(value = "idDisciplina") Long disciplinaId) throws ResourceNotFoundException {
+		Disciplina disciplina = disciplinaRepository.findById(disciplinaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Disciplina não encontrada para este id :: " + disciplinaId));;
+		Professor professor = professorRepository.findById(professorId)
+		          .orElseThrow(() -> new ResourceNotFoundException("Professor não encontrado para este id :: " + professorId));
+
+		professor.getDisciplinas().add(disciplina);
+		
         return professorRepository.save(professor);
     }
 	
