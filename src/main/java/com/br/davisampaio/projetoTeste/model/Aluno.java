@@ -92,7 +92,7 @@ public class Aluno {
 	@Column(name = "media", nullable = true)
 	public Integer getMedia() {
 		if(this.vp1 != null && this.vp2 != null && this.vf != null) {
-			return (this.vp1 + (this.vp2 * 2) + (this.vf * 3))/5;			
+			return (this.vp1 + (this.vp2 * 2) + (this.vf * 3))/6;			
 		}
 		else {
 			return media;

@@ -34,23 +34,23 @@ public class AlunoController {
     }
 	
 	@GetMapping("/alunos/{id}")
-    public ResponseEntity<Aluno> getEmployeeById(@PathVariable(value = "id") Long alunoId)
+    public ResponseEntity<Aluno> getAlunoById(@PathVariable(value = "id") Long alunoId)
         throws ResourceNotFoundException {
         Aluno aluno = alunoRepository.findById(alunoId)
-          .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + alunoId));
+          .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado para este id :: " + alunoId));
         return ResponseEntity.ok().body(aluno);
     }
 	
 	@PostMapping("/alunos")
-    public Aluno createEmployee(@Valid @RequestBody Aluno aluno) {
+    public Aluno createAluno(@Valid @RequestBody Aluno aluno) {
         return alunoRepository.save(aluno);
     }
 	
 	@PutMapping("/alunos/{id}")
-    public ResponseEntity<Aluno> updateEmployee(@PathVariable(value = "id") Long alunoId,
+    public ResponseEntity<Aluno> updateAluno(@PathVariable(value = "id") Long alunoId,
          @Valid @RequestBody Aluno alunoDetails) throws ResourceNotFoundException {
         Aluno aluno= alunoRepository.findById(alunoId)
-        .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + alunoId));
+        .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado para este id :: " + alunoId));
 
         aluno.setEmail(alunoDetails.getEmail());
         aluno.setNome(alunoDetails.getNome());
@@ -64,10 +64,10 @@ public class AlunoController {
     }
 	
 	@DeleteMapping("/alunos/{id}")
-    public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Long alunoId)
+    public Map<String, Boolean> deleteAluno(@PathVariable(value = "id") Long alunoId)
          throws ResourceNotFoundException {
         Aluno aluno = alunoRepository.findById(alunoId)
-       .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + alunoId));
+       .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado para este id :: " + alunoId));
 
         alunoRepository.delete(aluno);
         Map<String, Boolean> response = new HashMap<>();
