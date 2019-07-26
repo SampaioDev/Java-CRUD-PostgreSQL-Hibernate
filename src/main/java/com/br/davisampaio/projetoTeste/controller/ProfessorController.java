@@ -50,6 +50,16 @@ public class ProfessorController {
         return professorRepository.save(professor);
     }
 	
+	@PostMapping("/professor/{disciplinaIds}")
+    public Professor createProfessorWithDisciplina(@Valid @RequestBody Professor professor, @PathVariable(value = "disciplinaIds") List<Long> disciplinaIds) throws ResourceNotFoundException {
+    	List<Disciplina> disciplinas = disciplinaRepository.findAllById(disciplinaIds);
+    	if(!disciplinas.isEmpty() && disciplinas != null) {
+    		professor.setDisciplinas(disciplinas);    		
+    	}
+		
+		return professorRepository.save(professor);
+    }
+	
 	@PutMapping("/professor/professorId:{id}/disciplinaId:{idDisciplina}")
     public Professor addDisciplinaToProfessor(@PathVariable(value = "id") Long professorId, @PathVariable(value = "idDisciplina") Long disciplinaId) throws ResourceNotFoundException {
 		Disciplina disciplina = disciplinaRepository.findById(disciplinaId)
@@ -71,7 +81,6 @@ public class ProfessorController {
         professor.setEmail(professorDetails.getEmail());
         professor.setNome(professorDetails.getNome());
         professor.setIdade(professorDetails.getIdade());
-        professor.setDisciplinas(professorDetails.getDisciplinas());
         final Professor updatedProfessor = professorRepository.save(professor);
         return ResponseEntity.ok(updatedProfessor);
     }
